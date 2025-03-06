@@ -1,3 +1,14 @@
+---
+title: "Lab 4: Importing NOAA Buoy Data from Monterey Bay"
+author: "Cherie Wang"
+date: "2/23/2025"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    echo: true
+---
+    
 # Part 1: Setup
 
 ## GitHub Workflow
@@ -155,14 +166,21 @@ Now that are data is "analytic ready", go ahead and read in your clean data and 
 library(viridis)
 data <- read_csv("data-clean/buoy_update.csv")
 
-ggplot(data, aes(x = MM, y = ATMP, color = factor(MM))) +  
-  geom_point(position = "jitter", alpha = 0.3, show.legend = FALSE) +
-  geom_smooth(se = FALSE, color = "black", show.legend = FALSE) +
+ggplot(data, aes(x = MM,
+                 y = ATMP, 
+                 color = factor(MM))) +  
+  geom_point(position = "jitter",
+             alpha = 0.3, 
+             show.legend = FALSE) +
+  geom_smooth(se = FALSE, 
+              color = "black",
+              show.legend = FALSE) +
   labs(title = "Monterey Bay Canon Air Temperature in 2024",
        y = "Air Temperature (Celsius)",
        x = "Month in 2024",
        color = "MM") + 
   scale_color_viridis(discrete = TRUE) + 
+  scale_x_continuous(breaks = 1:12) + 
   theme_minimal()
 ```
 
@@ -182,9 +200,14 @@ One fun source for data is [Tidy Tuesday](https://github.com/rfordatascience/tid
 
 **For your found data write a brief description of the data and and provide its source.**
 
->Insert your description and link to your source here. Identify 2-3 research questions you could try to answer with this data.  
+Data on the kinds and frequency of police encounters with people, including arrests, are included in the Tidy Tuesday dataset for different areas.  It enables the investigation of police operations, demographic variables, and crime patterns.
 
+Questions:
+How many encounters with the police occurred in each area?
+ Which kind of police encounter occurs most frequently?
+ Which month saw the highest number of arrests?
 
+Source: https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/docApi
 
 
 # Lab 4 Submission
