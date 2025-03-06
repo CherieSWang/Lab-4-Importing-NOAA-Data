@@ -1,12 +1,12 @@
 ---
 title: "Lab 4: Importing NOAA Buoy Data from Monterey Bay"
 author: "Cherie Wang"
-date: "2/23/2025"
-format: 
-  html:
-    embed-resources: true
-    code-tools: true
-    echo: true
+date: "3/5/2025"
+format: html
+  embed_resources: true
+execute:
+  code_tools: true
+  echo: true
 ---
     
 # Part 1: Setup
@@ -204,8 +204,8 @@ Data on the kinds and frequency of police encounters with people, including arre
 
 Questions:
 How many encounters with the police occurred in each area?
- Which kind of police encounter occurs most frequently?
- Which month saw the highest number of arrests?
+Which kind of police encounter occurs most frequently?
+Which month saw the highest number of arrests?
 
 Source: https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/docApi
 
