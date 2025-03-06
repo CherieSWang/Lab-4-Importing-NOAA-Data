@@ -38,6 +38,7 @@ In the code chunk below, load in the packages necessary for your analysis. You s
 
 ```{r}
 #| label: setup
+library(tidyverse)
 
 ```
 
@@ -68,7 +69,9 @@ When you read in the data give it an appropriate name for what the data represen
 
 ```{r}
 #| label: load-data
-
+#download.file("https://jcanner.github.io/stat_210_2025_website/docs/labs/student/data/buoy_2024.txt", 
+             # destfile = "buoy_2023.txt")
+read_table("data-raw/buoy_2023.txt")
 ```
 
 Notice that the data is all read in as a character value and the first row contains information that is not data, but additional information about the variables: this is called a "comment" in the data.  
@@ -78,7 +81,7 @@ In your data, you will notice the `#` in front of `yr` in the second row. That i
 
 ```{r}
 #| label: load-data-comment
-
+read_table("data-raw/buoy_2023.txt", comment = "#")
 ```
 
 
@@ -87,7 +90,11 @@ We want to use snake_case for our variable names. Use the `janitor` package to c
 
 ```{r}
 #| label: clean-names
-
+library(janitor)
+data <- read_table("data-raw/buoy_2023.txt", comment = "#")
+clean_names(data)%>% 
+  rename(mm = mm,
+         mm_2 = mm_2)
 ```
 
 ## Step 4: Write the Data Part 1
@@ -97,6 +104,7 @@ Write the data to a `csv` file called `buoy_update.csv`. Be sure to write it to 
 
 ```{r}
 #| label: write-data-part-1
+write_csv(data, "data-raw/buoy_update.csv")
 
 ```
 
@@ -112,7 +120,11 @@ Remember that now we are reading back in a data file of type `csv`. Now when you
 
 ```{r}
 #| label: load-data-again
-
+#| eval: false
+data <- read_csv("data-raw/buoy_update.csv", 
+         col_types = cols(.default = "c"), 
+         na = c("99", "999")
+         )
 ```
 
 This is great! But we created another problem. Now all of our numeric values are being treated like characters and we don't want that. There are a couple of ways to fix this. We can write and reread in the data setting the column types to `double` or we can use the `readr` parsing functions. 
@@ -121,8 +133,13 @@ Here is the code you can use to fix the data without exporting and importing aga
 
 ```{r}
 #| label: parse-double
-buoy_final <- your_file_name |> 
-  mutate(across(.cols = everything(), ~parse_double(.x)))
+buoy_final <- data |> 
+  mutate(across(.cols = everything(),
+                ~parse_double(.x)))
+
+write_csv(buoy_final,
+          "data-clean/buoy_update.csv")
+
 ```
 
 
@@ -135,6 +152,19 @@ Now that are data is "analytic ready", go ahead and read in your clean data and 
 
 ```{r}
 #| label: monterey-air-temp-viz
+library(viridis)
+data <- read_csv("data-clean/buoy_update.csv")
+
+ggplot(data, aes(x = MM, y = ATMP, color = factor(MM))) +  
+  geom_point(position = "jitter", alpha = 0.3, show.legend = FALSE) +
+  geom_smooth(se = FALSE, color = "black", show.legend = FALSE) +
+  labs(title = "Monterey Bay Canon Air Temperature in 2024",
+       y = "Air Temperature (Celsius)",
+       x = "Month in 2024",
+       color = "MM") + 
+  scale_color_viridis(discrete = TRUE) + 
+  theme_minimal()
+```
 
 
 ```
